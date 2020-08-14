@@ -12,7 +12,6 @@ const getGeoCoords = async(address) => {
     if (useAxios) {
         const response = await axios.get(url);
         const coordinateData = {};
-        console.log(response);
         if (response.data.status === ZERO_RESULTS) {
             return ZERO_RESULTS;
         }
