@@ -2,6 +2,7 @@ const axios = require('axios');
 const openWeatherAPI = require('../../config.json').openWeatherAPI;
 const getGeoCoords = require('../../utils/geolocation');
 const DiscordResponse = require('../../utils/discordresponse');
+const ZERO_RESULTS = 'ZERO_RESULTS';
 
 module.exports = {
     name: "current",
@@ -13,6 +14,23 @@ module.exports = {
         const weatherData = {};
 
         getGeoCoords(args.join(" ")).then(data => {
+            if (data === ZERO_RESULTS) {
+
+                const embedMessage = {};
+                embedMessage.title = 'Calefaction'
+                embedMessage.author_title = '';
+                embedMessage.author_icon = 'https://i.imgur.com/oN4b3wo.png';
+                embedMessage.thumbnail = 'https://i.imgur.com/qmiZDuC.png';
+                embedMessage.description = `Unable to find geolocation.`
+                embedMessage.fields = []
+                embedMessage.color = Math.floor(Math.random() * 16777214+ 1);
+                embedMessage.footer = 'Google Maps API & OpenWeather API';
+                
+                const embed = DiscordResponse(embedMessage);
+                message.channel.send(embed);
+                return;
+            }
+
             const weatherURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${data.lat}&lon=${data.lng}&exclude=hourly,daily&&units=imperial&appid=${openWeatherAPI}`;
             const weatherResp = axios.get(weatherURL);
 
