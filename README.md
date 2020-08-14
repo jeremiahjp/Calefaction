@@ -1,2 +1,4 @@
-# HotWeather
- Weather Bot
+# Calefaction
+ Weather Bot for Discord
+ 
+ More info coming here soon
